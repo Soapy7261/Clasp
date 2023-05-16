@@ -74,6 +74,15 @@ class ASTParser {
         }
 
         Expression *primary() {
+            if (peek().value == "[") {
+                advance();
+                vector<Expression *> values;
+                while (peek().value != "]") {
+                    values.push_back(expression());
+                    
+                    cout << advance().value << endl;
+                }
+            }
             if (peek().type == "IDENTIFIER" && peek(1).value == "(") {
                 advance();
                 string name = previous().value;
@@ -182,6 +191,7 @@ class ASTParser {
             //cout << tok0.value << " " << tok1.value << endl;
             if (tok0.type == "IDENTIFIER" && tok1.type == "OPERATOR") {
                 Assignment *out = new Assignment(tok0.value, expression());
+                if (advance().value != ";") error("SyntaxError", "Expected ';' after variable assignment");
                 return out;
             } else if (tok0.type == "KEYWORD" && tok1.type == "IDENTIFIER") {
                 if (tok0.value == "var") {
@@ -244,6 +254,7 @@ class ASTParser {
                 if (advance().value != ";") error("SyntaxError", "Expected ; after return statement");
                 return new Return(val);
             }
+            advance(-1);
             return new FunctionCall("",{});
         }
 
