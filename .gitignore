@@ -1,5 +1,7 @@
-node_modules
-test.bin
-package.json
-package-lock.json
 a.exe
+release/
+stdlib/
+cvm/
+.vscode/
+build.bat
+parser.csp
